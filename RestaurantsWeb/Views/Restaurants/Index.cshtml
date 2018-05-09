@@ -1,0 +1,109 @@
+﻿@model IEnumerable<resterauntWeb.Models.Restaurant>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+
+@using (Html.BeginForm("Inde", "Restaurants", FormMethod.Get))
+{
+    <p>Search Options:</p>
+    <label for="Name"> Name</label>
+    @Html.RadioButton("option", "Name", htmlAttributes: new { @id = "Name" })
+
+    <label for="City"> City</label>
+    @Html.RadioButton("option", "City", htmlAttributes: new { @id = "City" })
+    <label for=""> Order by Descending Name</label>
+    @Html.RadioButton("option", "Rating", htmlAttributes: new { @id = "Rating" })
+    <label for="Descending"> Order by Rating</label>
+    @Html.RadioButton("option", "Sort By Descending", htmlAttributes: new { @id = "Descending" })
+    @Html.TextBox("search")
+    <input type="submit"
+           name="submit"
+           value="Search" />
+
+}
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Street1)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.City)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.State)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Country)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.phone)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Zipcode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AvgRating)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Created)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Modified)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Street1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.State)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Country)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.phone, new { required = "required" })
+               
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Zipcode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AvgRating)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Created)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Modified)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>

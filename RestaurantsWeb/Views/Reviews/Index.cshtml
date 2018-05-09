@@ -1,0 +1,69 @@
+﻿@model IEnumerable<resterauntWeb.Models.Reviews>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Add a Review", "Create")
+</p>
+
+@using (Html.BeginForm("Inde", "Restaurants", FormMethod.Get))
+{
+    <p>Search Options:</p>
+    <label for="Name"> Name</label>
+    @Html.RadioButton("option", "Name", htmlAttributes: new { @id = "Name" })
+
+    <label for="City"> City</label>
+    @Html.RadioButton("option", "City", htmlAttributes: new { @id = "City" })
+    <label for="Rating"> Order by Rating</label>
+    @Html.RadioButton("option", "Rating", htmlAttributes: new { @id = "Rating" })
+
+    @Html.TextBox("search")
+    <input type="submit"
+           name="submit"
+           value="Search" />
+
+}
+
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.RestaurantId.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Rating)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Comments)
+        </th>
+     
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.RestaurantId.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rating)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Comments)
+            </td>
+      
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>
