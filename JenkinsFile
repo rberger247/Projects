@@ -8,7 +8,7 @@ node('master') {
         try {
             dir('RestaurantsWeb') {
                 bat 'nuget restore'
-                bat 'msbuild'
+                bat 'msbuild /p:MvcBuildviews=true'
             }
         }
         catch (exc) {
