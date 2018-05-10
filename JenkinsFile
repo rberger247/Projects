@@ -1,0 +1,30 @@
+node('master') {
+    stage('import') {
+        git 'https://github.com/rberger247/Projects'
+    }
+    stage('build') {
+        dir('RestaurantsWeb') {
+            bat 'nuget restore'
+            bat 'msbuild'
+        }
+    }
+    stage('test') {
+        bat "VSTest.Console BasicWebApp.Tests\\bin\\Debug\\BasicWebApp.Tests.dll"
+    }
+    stage('analyze') {
+        
+    }
+    stage('package') {
+        dir('RestaurantsWeb') {
+            bat 'msbuild /t:package'
+        }
+    }
+    stage('deploy') {
+        
+         dir('RestaurantsWeb') {
+            dir('RestaurantsWeb/obj/Debug/Package') {
+                bat "\"C:\\Program Files\\IIS\\Microsoft Web Deploy V3\\msdeploy.exe\" -source:package='C:\\Program Files (x86)\\Jenkins\\workspace\\Project-1\\Training Code\\Week 4\\BasicWebApp\\BasicWebApp\\obj\\Debug\\Package\\BasicWebApp.zip' -dest:auto,computerName=\"https://ec2-52-70-230-124.compute-1.amazonaws.com:8172/msdeploy.axd\",userName=\"Administrator\",password=\"${Password}"\",authtype=\"basic\",includeAcls=\"False\" -verb:sync -disableLink:AppPoolExtension -disableLink:ContentExtension -disableLink:CertificateExtension -setParamFile:\"C:\\Program Files (x86)\\Jenkins\\workspace\\Project-1\\Training Code\\Week 4\\BasicWebApp\\BasicWebApp\\obj\\Debug\\Package\\BasicWebApp.SetParameters.xml\" -AllowUntrusted=True"
+            }
+        }
+    }
+}
