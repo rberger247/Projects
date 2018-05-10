@@ -22,7 +22,7 @@ node('master') {
             }
         }
         catch (exc) {
-            slackSend color: 'danger', message: 'test failed!'
+          slackError('test')
             throw exc
         }
     }
@@ -32,7 +32,7 @@ node('master') {
             }
         }
         catch (exc) {
-            slackSend 'analyze failed!'
+          slackError('analyze')
         }
     }
     stage('package') {
@@ -47,6 +47,8 @@ node('master') {
             slackSend 'package failed!'
         }
     }
+    
+
     stage('deploy') {
         try {
             dir('Training Code/Week 4/BasicWebApp') {
@@ -59,4 +61,7 @@ node('master') {
             slackSend 'deploy failed!'
         }
     }
+}
+    def slackError(stageName) {
+    slackSend color: 'danger', message: "${stageName} stage failed. [<${JOB_URL}|${env.JOB_NAME}> <${env.BUILD_URL}console|${env.BUILD_DISPLAY_NAME}>] [${currentBuild.durationString[0..-14]}]"
 }
