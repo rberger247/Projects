@@ -7,7 +7,8 @@ node('master') {
     stage('build') {
         try {
             dir('RestaurantsWeb') {
-                bat 'nuget restore'
+                bat 'nuget restore -PackagesDirectory'
+'
                 bat 'msbuild /p:MvcBuildviews=true'
             }
         }
