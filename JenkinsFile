@@ -1,30 +1,62 @@
+
+
 node('master') {
     stage('import') {
         git 'https://github.com/rberger247/Projects'
     }
     stage('build') {
-        dir('RestaurantsWeb') {
-            bat 'nuget restore'
-            bat 'msbuild'
+        try {
+            dir('RestaurantsWeb') {
+                bat 'nuget restore'
+                bat 'msbuild'
+            }
+        }
+        catch (exc) {
+            slackSend 'build failed!'
         }
     }
     stage('test') {
-        bat "VSTest.Console BasicWebApp.Tests\\bin\\Debug\\BasicWebApp.Tests.dll"
+        try {
+            dir('RestaurantsWeb') {
+                bat "VSTest.Console RestaurantsWeb.Tests\\bin\\Debug\\RestaurantsWeb.Tests.dll"
+            }
+        }
+        catch (exc) {
+            slackSend color: 'danger', message: 'test failed!'
+            throw exc
+        }
     }
     stage('analyze') {
-        
+        try {
+            dir('RestaurantsWeb') {
+            }
+        }
+        catch (exc) {
+            slackSend 'analyze failed!'
+        }
     }
     stage('package') {
-        dir('RestaurantsWeb') {
-            bat 'msbuild /t:package'
+        try {
+            dir('RestaurantsWeb') {
+                dir('BasicWebApp') {
+                    bat 'msbuild /t:package'
+                }
+            }
+        }
+        catch (exc) {
+            slackSend 'package failed!'
         }
     }
     stage('deploy') {
-        
-         dir('RestaurantsWeb') {
-            dir('RestaurantsWeb/obj/Debug/Package') {
-                bat "\"C:\\Program Files\\IIS\\Microsoft Web Deploy V3\\msdeploy.exe\" -source:package='C:\\Program Files (x86)\\Jenkins\\workspace\\Project-1\\Training Code\\Week 4\\BasicWebApp\\BasicWebApp\\obj\\Debug\\Package\\BasicWebApp.zip' -dest:auto,computerName=\"https://ec2-52-70-230-124.compute-1.amazonaws.com:8172/msdeploy.axd\",userName=\"Administrator\",password=\"${Password}"\",authtype=\"basic\",includeAcls=\"False\" -verb:sync -disableLink:AppPoolExtension -disableLink:ContentExtension -disableLink:CertificateExtension -setParamFile:\"C:\\Program Files (x86)\\Jenkins\\workspace\\Project-1\\Training Code\\Week 4\\BasicWebApp\\BasicWebApp\\obj\\Debug\\Package\\BasicWebApp.SetParameters.xml\" -AllowUntrusted=True"
+        try {
+            dir('Training Code/Week 4/BasicWebApp') {
+                dir('BasicWebApp/obj/Debug/Package') {
+                    bat "\"C:\\Program Files\\IIS\\Microsoft Web Deploy V3\\msdeploy.exe\" -source:package='C:\\Program Files (x86)\\Jenkins\\workspace\\Project-1\\Training Code\\Week 4\\BasicWebApp\\BasicWebApp\\obj\\Debug\\Package\\BasicWebApp.zip' -dest:auto,computerName=\"https://ec2-52-70-230-124.compute-1.amazonaws.com:8172/msdeploy.axd\",userName=\"Administrator\",password=\"${env.Deploy_Password}\",authtype=\"basic\",includeAcls=\"False\" -verb:sync -disableLink:AppPoolExtension -disableLink:ContentExtension -disableLink:CertificateExtension -setParamFile:\"C:\\Program Files (x86)\\Jenkins\\workspace\\Project-1\\Training Code\\Week 4\\BasicWebApp\\BasicWebApp\\obj\\Debug\\Package\\BasicWebApp.SetParameters.xml\" -AllowUntrusted=True"
+                }
             }
+        }
+        catch (exc) {
+            slackSend 'deploy failed!'
         }
     }
 }
