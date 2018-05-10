@@ -6,11 +6,11 @@ node('master') {
     }
     stage('build') {
         try {
-            dir('RestaurantsWeb') {
+           
                 bat 'nuget restore'
 
                 bat 'msbuild /p:MvcBuildviews=true'
-            }
+            
         }
         catch (exc) {
             slackSend 'build failed!'
@@ -39,9 +39,9 @@ node('master') {
     stage('package') {
         try {
             dir('RestaurantsWeb') {
-                dir('RestaurantsWeb') {
+           
                     bat 'msbuild /t:package'
-                }
+                
             }
         }
         catch (exc) {
@@ -52,10 +52,10 @@ node('master') {
 
     stage('deploy') {
         try {
-            dir('RestaurantsWeb') {
+          
                 dir('RestaurantsWeb/obj/Debug/Package') {
                     bat "\"C:\\Program Files\\IIS\\Microsoft Web Deploy V3\\msdeploy.exe\" -source:package='C:\\Program Files (x86)\\Jenkins\\workspace\\Project-1\\RestaurantsWeb\\obj\\Debug\\Package\\BasicWebApp.zip' -dest:auto,computerName=\"https://ec2-54-88-118-117.compute-1.amazonaws.com:8172/msdeploy.axd\",userName=\"Administrator\",password=\"${password}\",authtype=\"basic\",includeAcls=\"False\" -verb:sync -disableLink:AppPoolExtension -disableLink:ContentExtension -disableLink:CertificateExtension -setParamFile:\"C:\\Program Files (x86)\\Jenkins\\workspace\\Project-1\\RestaurantsWeb\\obj\\Debug\\Package\\BasicWebApp.SetParameters.xml\" -AllowUntrusted=True"
-                }
+                
             }
         }
         catch (exc) {
