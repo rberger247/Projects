@@ -54,7 +54,7 @@ node('master') {
         try {
           
                 dir('RestaurantsWeb/obj/Debug/Package') {
-                    bat "\"C:\\Program Files\\IIS\\Microsoft Web Deploy V3\\msdeploy.exe\" -source:package='C:\\Program Files (x86)\\Jenkins\\workspace\\Project-1\\RestaurantsWeb\\obj\\Debug\\Package\\BasicWebApp.zip' -dest:auto,computerName=\"https://ec2-54-88-118-117.compute-1.amazonaws.com:8172/msdeploy.axd\",userName=\"Administrator\",password=\"${password}\",authtype=\"basic\",includeAcls=\"False\" -verb:sync -disableLink:AppPoolExtension -disableLink:ContentExtension -disableLink:CertificateExtension -setParamFile:\"C:\\Program Files (x86)\\Jenkins\\workspace\\Project-1\\RestaurantsWeb\\obj\\Debug\\Package\\BasicWebApp.SetParameters.xml\" -AllowUntrusted=True"
+                    bat "\"C:\\Program Files\\IIS\\Microsoft Web Deploy V3\\msdeploy.exe\" -source:package='C:\\Program Files (x86)\\Jenkins\\workspace\\Project-2\\RestaurantsWeb\\obj\\Debug\\Package\\BasicWebApp.zip' -dest:auto,computerName=\"https://ec2-52-7-69-184.compute-1.amazonaws.com:8172/msdeploy.axd\",userName=\"Administrator\",password=\"${password}\",authtype=\"basic\",includeAcls=\"False\" -verb:sync -disableLink:AppPoolExtension -disableLink:ContentExtension -disableLink:CertificateExtension -setParamFile:\"C:\\Program Files (x86)\\Jenkins\\workspace\\Project-2\\RestaurantsWeb\\obj\\Debug\\Package\\BasicWebApp.SetParameters.xml\" -AllowUntrusted=True"
                 
             }
         }
