@@ -8,9 +8,9 @@ node('master') {
         try {
            
                 bat 'nuget restore'
-               dir('RestaurantsWeb'){
+             
                 bat 'msbuild /p:MvcBuildviews=true'
-     }       
+        
         }
         catch (exc) {
             slackSend 'build failed!'
